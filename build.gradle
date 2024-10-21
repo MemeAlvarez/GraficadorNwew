@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.openjfx:javafx-controls:17.0.6'
+    implementation 'org.openjfx:javafx-fxml:17.0.6'
+    implementation 'org.controlsfx:controlsfx:11.1.2'
+    implementation 'com.dlsc.formsfx:formsfx-core:11.6.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+javafx {
+    version = "17.0.6"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+application {
+    mainClass.set('com.graficador.ApplicationMain')
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.graficador.ApplicationMain'
+        )
+    }
+}
+
+task jlink(type: Exec) {
+    dependsOn jar
+    def jlinkDir = new File(buildDir, 'jlink')
+    def jdkHome = System.getenv('JAVA_HOME') ?: System.getProperty('java.home')
+    def jmodPath = "${jdkHome}/jmods"
+    def javaHome = new File(jdkHome).parentFile
+    def javaFxDir = "${project.buildDir}/libs"  // Ajusta esto si tus módulos de JavaFX están en una ruta diferente
+
+    doFirst {
+        mkdir jlinkDir
+        commandLine "${jdkHome}/bin/jlink",
+                '--module-path', "${javaFxDir};${jmodPath}",
+                '--add-modules', 'java.base,javafx.controls,javafx.fxml,org.controlsfx.controls,com.dlsc.formsfx',
+                '--output', jlinkDir
+    }
+}
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
+}

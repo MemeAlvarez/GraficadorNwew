@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="662.0" prefWidth="561.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.main.ImagesController">
+   <children>
+      <ImageView fitHeight="702.0" fitWidth="464.0" layoutX="33.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/encabezado/Pol-Abso.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

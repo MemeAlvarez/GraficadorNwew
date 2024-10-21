@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="mainPane" prefHeight="651.0" prefWidth="737.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.main.MenuController">
+   <children>
+      <ImageView fitHeight="551.0" fitWidth="647.0" layoutX="62.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="26.0">
+         <image>
+            <Image url="@images/encabezado/ec_completo.JPG" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnContinue" layoutX="255.0" layoutY="580.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="226.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="255.0" AnchorPane.rightAnchor="256.0" />
+   </children>
+</AnchorPane>

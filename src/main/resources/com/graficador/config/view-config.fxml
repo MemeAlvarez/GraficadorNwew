@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="262.0" prefWidth="461.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.config.ConfigController">
+   <children>
+      <Label alignment="TOP_CENTER" layoutX="153.0" layoutY="-1.0" prefHeight="31.0" prefWidth="155.0" text="Configuracion">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Label>
+      <Pane layoutX="14.0" layoutY="45.0" prefHeight="53.0" prefWidth="316.0">
+         <children>
+            <Label layoutX="4.0" layoutY="10.0" prefHeight="31.0" prefWidth="120.0" text="Background Color">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <ColorPicker fx:id="colorPicker" layoutX="140.0" layoutY="14.0" prefHeight="25.0" prefWidth="155.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="14.0" layoutY="98.0" prefHeight="53.0" prefWidth="316.0">
+         <children>
+            <Label layoutX="4.0" layoutY="10.0" prefHeight="31.0" prefWidth="120.0" text="Auto Color">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="checkBox" layoutX="142.0" layoutY="8.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="155.0" text="Auto" />
+         </children>
+      </Pane>
+      <Button fx:id="btnAbout" layoutX="385.0" layoutY="223.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="62.0" text="About" />
+      <Button fx:id="btnSave" layoutX="189.0" layoutY="223.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="Guardar" />
+   </children>
+</AnchorPane>
