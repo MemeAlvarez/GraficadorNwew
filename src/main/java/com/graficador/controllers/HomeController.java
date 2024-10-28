@@ -1,4 +1,4 @@
-package com.graficador.main;
+package com.graficador.controllers;
 
 import com.graficador.ApplicationMain;
 import javafx.fxml.FXML;
@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MenuController {
+public class HomeController {
 
     @FXML
     Pane mainPane;
@@ -46,9 +46,9 @@ public class MenuController {
 
     public void openGraph() throws IOException {
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("views/view-graph.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1510, 768);
-        stage.setTitle("Graficador");
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("GB2D/view-menu.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Menu");
         stage.setScene(scene);
         stage.show();
     }

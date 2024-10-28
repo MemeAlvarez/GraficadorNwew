@@ -7,7 +7,7 @@
     <children>
         <ImageView fitHeight="552.0" fitWidth="646.0" layoutX="33.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@images/encabezado/Cart-Rela.jpg" />
+                <Image url="@../images/encabezado/Cart-Rela.jpg" />
             </image>
         </ImageView>
     </children>

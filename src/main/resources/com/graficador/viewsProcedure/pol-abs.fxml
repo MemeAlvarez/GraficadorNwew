@@ -7,7 +7,7 @@
    <children>
       <ImageView fitHeight="702.0" fitWidth="464.0" layoutX="33.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/encabezado/Pol-Abso.jpg" />
+            <Image url="@../images/encabezado/Pol-Abso.jpg" />
          </image>
       </ImageView>
    </children>

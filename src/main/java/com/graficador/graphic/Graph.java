@@ -4,6 +4,8 @@ import com.graficador.ApplicationMain;
 import com.graficador.color.ConfigColor;
 import com.graficador.config.ConfigController;
 import com.graficador.config.Configuration;
+import com.graficador.controllers.ApplicationControllerTraslacion;
+import com.graficador.controllers.GraphFigura;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +21,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -35,9 +36,7 @@ public class Graph extends Pane {
 
     enum GRAPH_COMMANDS{
         SELECT        ,
-        POINT_ADD     ,
-
-        POINT_LINE_ADD,
+        POINT_ADD
     }
 
     GRAPH_COMMANDS graphState = GRAPH_COMMANDS.POINT_ADD;
@@ -57,6 +56,7 @@ public class Graph extends Pane {
     ArrayList<Text> div_list_t = new ArrayList<Text>();
 
     TableView<GraphPoint>                   pointTable    ;
+    TableView<GraphPoint> pointTableP;
 
     ToolBar                                 commandToolbar;
     ToolBar                                 manageToolbar ;
@@ -295,7 +295,7 @@ public class Graph extends Pane {
     }
 
     public void updateComponents(){
-        updatePointTable();
+        //updatePointTable();
     }
 
     public void updatePointTable(){
@@ -305,6 +305,46 @@ public class Graph extends Pane {
         pointTable.refresh();
     }
 
+    public void updateoriginalPointTable(ApplicationControllerTraslacion apt) {
+        try {
+            if (pointTable == null) {
+                System.out.println("Error: pointTable no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFigura.getPointsOriginales(this, graphForm, apt));
+            pointTable.setItems(translatedPoints);
+            pointTable.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+
+    public void updateTranslatedPointTable(ApplicationControllerTraslacion apt) {
+        try {
+            if (pointTableP == null) {
+                System.out.println("Error: pointTableP no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFigura.getPointsTrasladados(this, graphForm, apt));
+            pointTableP.setItems(translatedPoints);
+            pointTableP.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+    public void clearTables() {
+        // Limpia la tabla de puntos originales
+        if (pointTable != null) {
+            pointTable.setItems(FXCollections.observableArrayList()); // Establece una lista vacía
+        }
+
+        // Limpia la tabla de puntos trasladados
+        if (pointTableP != null) {
+            pointTableP.setItems(FXCollections.observableArrayList()); // Establece una lista vacía
+        }
+    }
 
     public void setGraphState(GRAPH_COMMANDS state){
         graphState = state;
@@ -450,7 +490,39 @@ public class Graph extends Pane {
         this.pointTable = pointtable;
         return this;
     }
+    public Graph setPointTableP(TableView<GraphPoint> pointtableP) {
 
+        //Hide
+
+        pointtableP.setOnMouseClicked(mouseEvent -> {
+            TablePosition<?, ?> pos = pointtableP.getFocusModel().getFocusedCell();
+            if (pos != null && pos.getColumn() == 0) {
+                GraphPoint point = pointtableP.getSelectionModel().getSelectedItem();
+                if (point != null) {
+                    pointtableP.refresh();  // Refresca después de cambiar la visibilidad
+                }
+            }
+        });
+
+
+        //Delete
+        pointtableP.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.BACK_SPACE){
+                TablePosition<?, ?> pos = pointtableP.getFocusModel().getFocusedCell();
+                if (pos != null && pos.getRow() >= 0) {
+                    GraphPoint point = pointtableP.getSelectionModel().getSelectedItem();
+                    if (point != null) {
+                        graphForm.removePoint(point);
+                        graphForm.updateLines();
+                        updateComponents();
+                    }
+                }
+            }
+        });
+
+        this.pointTableP = pointtableP;
+        return this;
+    }
 
     public ToolBar getCommandToolbar() {
         return commandToolbar;
@@ -465,7 +537,6 @@ public class Graph extends Pane {
                 setGraphState(GRAPH_COMMANDS.SELECT);
                 graphForm.clear ();
                 updateComponents();
-                System.out.println("D");
             });
 
         }
@@ -473,32 +544,7 @@ public class Graph extends Pane {
         return this;
     }
 
-    /*public Graph setManageToolbar(ToolBar manageToolbar){
-        List<Node> itemList = manageToolbar.getItems();
 
-        if (itemList.size() >= 2) {
-            Button bsave   = ((Button) (itemList.get(0)));
-            Button bsaveAs = ((Button) (itemList.get(1)));
-            Button bload   = ((Button) (itemList.get(2)));
-
-            bsave.setTooltip(new Tooltip("Guardar"));
-            bsave.setOnAction(event -> {
-                saveGraphForm();
-            });
-
-            bsaveAs.setTooltip(new Tooltip("Guardar como"));
-            bsaveAs.setOnAction(event -> {
-                saveGraphFormAs();
-            });
-
-            bload.setTooltip(new Tooltip("Cargar"));
-            bload.setOnAction(event -> {
-                loadGraphForm();
-            });
-        }
-        this.manageToolbar = manageToolbar;
-        return this;
-    }*/
 
     public Graph setConfigToolbar(ToolBar configToolbar){
         List<Node> itemList = configToolbar.getItems();
@@ -637,6 +683,7 @@ public class Graph extends Pane {
 
         return this;
     }
+
     // Método que abre el FXML correspondiente dependiendo del template seleccionado
     public void openProcedureFXML(GraphTemplates.GRAPH_TEMPLATE template) throws IOException {
         String fxmlFile = "";
@@ -647,13 +694,13 @@ public class Graph extends Pane {
                 //fxmlFile = "cartesianas_absolutas.fxml";
                 break;
             case POLARESABSOLUTAS:
-                fxmlFile = "pol-abs.fxml";
+                fxmlFile = "viewsProcedure/pol-abs.fxml";
                 break;
             case CARTESIANASRELATIVAS:
-                fxmlFile = "cart-relat.fxml";
+                fxmlFile = "viewsProcedure/cart-relat.fxml";
                 break;
             case POLARESRELATIVAS:
-                fxmlFile = "pol-relat.fxml";
+                fxmlFile = "viewsProcedure/pol-relat.fxml";
                 break;
             default:
                 throw new IllegalArgumentException("No FXML available for this template");
@@ -768,7 +815,7 @@ public class Graph extends Pane {
     private void openConfigDialog() {
         try {
             // Cargar el archivo FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/graficador/config/view-config.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/graficador/views/view-config.fxml"));
             Parent root = loader.load();
 
             ConfigController controller = loader.getController();
@@ -834,98 +881,36 @@ public class Graph extends Pane {
         setColorAuto(config.getColorAuto()      );
     }
 
-    public void saveGraphForm(){
+    //***********************************
+    //FUNCIONES QUE USO PARA LA TRASLACION
+    public Graph setLimpiar() {
+        setGraphState(GRAPH_COMMANDS.SELECT);
+        graphForm.clear();
+        updateComponents();
 
-        if (current_file != null) {
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(current_file))) {
-                graphForm.datalize();
-                oos.writeObject(graphForm);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            saveGraphFormAs();
-        }
+        return this;
     }
 
-    public void saveGraphFormAs(){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar archivo");
+    public Graph setFiguraPersonalida(ApplicationControllerTraslacion apt) {
+        GraphFigura.GRAPH_FIGURA template = GraphFigura.GRAPH_FIGURA.FIGURAORIGINAL;
 
-        // Definir extensión predeterminada para el archivo .gform
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Graph Form (*.gform)", "*.gform");
-        fileChooser.getExtensionFilters().add(extFilter);
+        // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
+        template.create(this, graphForm, apt);
 
-        Stage stage = (Stage) this.getScene().getWindow();
+        // Actualiza componentes si es necesario
+        updateComponents();
 
-        // Abrir cuadro de diálogo para seleccionar dónde guardar
-        File file = fileChooser.showSaveDialog(stage);
-
-        if (file != null) {
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-                graphForm.datalize();
-                oos.writeObject(graphForm);
-                current_file = file;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        return this;
     }
+    public Graph setFiguraTrasladada(ApplicationControllerTraslacion apt) {
+        GraphFigura.GRAPH_FIGURA template = GraphFigura.GRAPH_FIGURA.FIGURATRASLADADA;
 
-    public void loadGraphForm(){
+        // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
+        template.create(this, graphForm, apt);
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Abrir archivo");
+        // Actualiza componentes si es necesario
+        updateComponents();
 
-        // Definir extensión predeterminada para el archivo .gform
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Graph Form (*.gform)", "*.gform");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        Stage stage = (Stage) this.getScene().getWindow();
-
-        // Abrir cuadro de diálogo para seleccionar dónde guardar
-        File file = fileChooser.showOpenDialog(stage);
-
-        if (stage != null) {
-            graphForm.destroy();
-            loadGraphFormFile(file);
-        }
+        return this;
     }
-
-    public void loadGraphFormFile(File file){
-
-        if (file != null) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                graphForm.destroy();
-                GraphForm loadedGraphForm = (GraphForm) ois.readObject();
-                graphForm = (GraphForm) loadedGraphForm.setMainGraph(this);
-                graphForm.reload();
-                graphForm.colorize();
-                updateComponents();
-                current_file = file;
-
-                ((Stage)this.getScene().getWindow()).setTitle("Graficador-"+current_file.getName());
-
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void loadGraphFormFileStream(InputStream fileStream){
-        if (fileStream != null) {
-            try(InputStream is = fileStream; ObjectInputStream ois = new ObjectInputStream(is) ) {
-                graphForm.destroy();
-                GraphForm loadedGraphForm = (GraphForm) ois.readObject();
-                graphForm    = (GraphForm) loadedGraphForm.setMainGraph(this);
-                graphForm.reload();
-                graphForm.colorize();
-                updateComponents();
-
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
 }

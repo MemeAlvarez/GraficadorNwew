@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="mainPane" prefHeight="651.0" prefWidth="737.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.controllers.MenuController">
+   <children>
+      <ImageView fitHeight="551.0" fitWidth="647.0" layoutX="62.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="26.0">
+         <image>
+            <Image url="@../images/encabezado/ec_menu.JPG" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnTraslation" layoutX="101.0" layoutY="278.0" mnemonicParsing="false" text="TRASLACION">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnEscalation" layoutX="360.0" layoutY="278.0" mnemonicParsing="false" text="ESCALACION">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnRotation" layoutX="605.0" layoutY="278.0" mnemonicParsing="false" text="ROTACION">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnInicio" layoutX="102.0" layoutY="554.0" mnemonicParsing="false" text="INICIO">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

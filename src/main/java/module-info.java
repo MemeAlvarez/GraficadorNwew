@@ -11,6 +11,7 @@ module com.graficador {
 
     opens com.graficador to javafx.fxml, com.google.gson;
     opens com.graficador.main to javafx.fxml;
+    opens com.graficador.controllers to javafx.fxml;
     opens com.graficador.graphic to javafx.fxml;
     opens com.graficador.config to javafx.fxml, com.google.gson;  // Agregado para com.google.gson
     opens com.graficador.color to javafx.fxml, com.google.gson;   // Agregado si es necesario
@@ -18,5 +19,6 @@ module com.graficador {
     exports com.graficador.main;
     exports com.graficador.graphic;
     exports com.graficador;
+    exports com.graficador.controllers;
 }
 

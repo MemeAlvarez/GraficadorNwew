@@ -28,26 +28,11 @@ public class GraphForm extends GraphObject implements Serializable {
         list_point.add(point);
     }
 
-    public void addPoint(GraphPoint[] pointArray){
-        for(int i = 0; i < pointArray.length; i++) {
-            GraphPoint point = pointArray[i];
-            point.addToGraph(mainGraph);
-            list_point.add(point);
-        }
-    }
-
     public void addLine(GraphLine line){
         line.addToGraph(mainGraph);
         list_line.add(line);
     }
 
-    public void addLine(GraphLine[] lineArray){
-        for(int i = 0; i < lineArray.length; i++) {
-            GraphLine line = lineArray[i];
-            line.addToGraph(mainGraph);
-            list_line.add(line);
-        }
-    }
 
     public void removePoint(GraphPoint point){
         point.destroy();

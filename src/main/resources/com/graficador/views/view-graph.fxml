@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane fx:id="mainPane" prefHeight="768.0" prefWidth="1511.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.main.ApplicationController">
+<Pane fx:id="mainPane" prefHeight="768.0" prefWidth="1316.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.main.ApplicationController">
    <children>
       <ToolBar fx:id="commandToolbar" prefHeight="35.0" prefWidth="152.0">
         <items>
