@@ -92,8 +92,8 @@
       <TableView fx:id="pointTableP" layoutX="1055.0" layoutY="422.0" prefHeight="293.0" prefWidth="230.0">
         <columns>
           <TableColumn fx:id="namePuntosP" prefWidth="75.0" text="Puntos '" />
-            <TableColumn fx:id="yColumnP" prefWidth="75.0" text="Y'" />
           <TableColumn prefWidth="75.0" text="X'" fx:id="xColumnP" />
+            <TableColumn fx:id="yColumnP" prefWidth="75.0" text="Y'" />
         </columns>
       </TableView>
       <Label layoutX="1111.0" layoutY="48.0" text="Puntos Originales">

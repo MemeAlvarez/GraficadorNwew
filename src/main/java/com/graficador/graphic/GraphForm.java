@@ -196,4 +196,27 @@ public class GraphForm extends GraphObject implements Serializable {
         }
     }
 
+    public interface AdjustInterface {
+        public default void execute(GraphForm form,Graph graph, GraphPoint point, int index, int size){
+
+        }
+    }
+
+    public void adjustPoints(AdjustInterface inter){
+        int i    = 0;
+        int size = list_point.size();
+        for(GraphPoint point: list_point) {
+            inter.execute(this, getMainGraph(),point, i++, size);
+        }
+    }
+
+    public void aaa(){
+        adjustPoints(new AdjustInterface() {
+            @Override
+            public void execute(GraphForm form, Graph graph, GraphPoint point, int index, int size) {
+                point.setXY(0,0);
+            }
+        });
+    }
+
 }

@@ -58,6 +58,9 @@ public class ApplicationController {
     @FXML
     ComboBox<GraphTemplates.GRAPH_TEMPLATE> comboPersonals;
 
+    @FXML
+    Button AAAA;
+
     Graph graph;
 
     public ApplicationController() {
@@ -80,6 +83,9 @@ public class ApplicationController {
               addToMainPane    (mainPane      );
         graph.updateComponents();
 
+        AAAA.setOnAction(event -> {
+            graph.getGraphForm().aaa();
+        });
     }
 
     public void initializaPointTable(){
