@@ -4,8 +4,7 @@ import com.graficador.ApplicationMain;
 import com.graficador.color.ConfigColor;
 import com.graficador.config.ConfigController;
 import com.graficador.config.Configuration;
-import com.graficador.controllers.ApplicationControllerTraslacion;
-import com.graficador.controllers.GraphFigura;
+import com.graficador.controllers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -55,8 +54,11 @@ public class Graph extends Pane {
     ArrayList<Line> div_list_l = new ArrayList<Line>();
     ArrayList<Text> div_list_t = new ArrayList<Text>();
 
-    TableView<GraphPoint>                   pointTable    ;
-    TableView<GraphPoint> pointTableP;
+    TableView<GraphPoint>                   pointTable;
+
+    TableView<GraphPoint>                   OriginalTable;
+    TableView<GraphPoint>                   OriginalTableP ;
+
 
     ToolBar                                 commandToolbar;
     ToolBar                                 manageToolbar ;
@@ -295,7 +297,7 @@ public class Graph extends Pane {
     }
 
     public void updateComponents(){
-        //updatePointTable();
+        updatePointTable();
     }
 
     public void updatePointTable(){
@@ -303,47 +305,6 @@ public class Graph extends Pane {
         ObservableList<GraphPoint> list = FXCollections.observableArrayList( graphForm.getPoints() );
         pointTable.setItems(list);
         pointTable.refresh();
-    }
-
-    public void updateoriginalPointTable(ApplicationControllerTraslacion apt) {
-        try {
-            if (pointTable == null) {
-                System.out.println("Error: pointTable no está inicializada.");
-                return; // Salir del método si es nulo
-            }
-
-            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFigura.getPointsOriginales(this, graphForm, apt));
-            pointTable.setItems(translatedPoints);
-            pointTable.refresh();
-        } catch (Exception e) {
-            e.printStackTrace(); // Imprimir la excepción para depuración
-        }
-    }
-
-    public void updateTranslatedPointTable(ApplicationControllerTraslacion apt) {
-        try {
-            if (pointTableP == null) {
-                System.out.println("Error: pointTableP no está inicializada.");
-                return; // Salir del método si es nulo
-            }
-
-            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFigura.getPointsTrasladados(this, graphForm, apt));
-            pointTableP.setItems(translatedPoints);
-            pointTableP.refresh();
-        } catch (Exception e) {
-            e.printStackTrace(); // Imprimir la excepción para depuración
-        }
-    }
-    public void clearTables() {
-        // Limpia la tabla de puntos originales
-        if (pointTable != null) {
-            pointTable.setItems(FXCollections.observableArrayList()); // Establece una lista vacía
-        }
-
-        // Limpia la tabla de puntos trasladados
-        if (pointTableP != null) {
-            pointTableP.setItems(FXCollections.observableArrayList()); // Establece una lista vacía
-        }
     }
 
     public void setGraphState(GRAPH_COMMANDS state){
@@ -456,7 +417,6 @@ public class Graph extends Pane {
     public TableView<GraphPoint> getPointTable() {
         return pointTable;
     }
-
     public Graph setPointTable(TableView<GraphPoint> pointtable) {
 
         //Hide
@@ -490,27 +450,27 @@ public class Graph extends Pane {
         this.pointTable = pointtable;
         return this;
     }
-    public Graph setPointTableP(TableView<GraphPoint> pointtableP) {
+    public Graph setPointTableOriginal(TableView<GraphPoint> originaltable) {
 
         //Hide
 
-        pointtableP.setOnMouseClicked(mouseEvent -> {
-            TablePosition<?, ?> pos = pointtableP.getFocusModel().getFocusedCell();
+        originaltable.setOnMouseClicked(mouseEvent -> {
+            TablePosition<?, ?> pos = originaltable.getFocusModel().getFocusedCell();
             if (pos != null && pos.getColumn() == 0) {
-                GraphPoint point = pointtableP.getSelectionModel().getSelectedItem();
+                GraphPoint point = originaltable.getSelectionModel().getSelectedItem();
                 if (point != null) {
-                    pointtableP.refresh();  // Refresca después de cambiar la visibilidad
+                    originaltable.refresh();  // Refresca después de cambiar la visibilidad
                 }
             }
         });
 
 
         //Delete
-        pointtableP.setOnKeyPressed(keyEvent -> {
+        originaltable.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.BACK_SPACE){
-                TablePosition<?, ?> pos = pointtableP.getFocusModel().getFocusedCell();
+                TablePosition<?, ?> pos = originaltable.getFocusModel().getFocusedCell();
                 if (pos != null && pos.getRow() >= 0) {
-                    GraphPoint point = pointtableP.getSelectionModel().getSelectedItem();
+                    GraphPoint point = originaltable.getSelectionModel().getSelectedItem();
                     if (point != null) {
                         graphForm.removePoint(point);
                         graphForm.updateLines();
@@ -520,7 +480,40 @@ public class Graph extends Pane {
             }
         });
 
-        this.pointTableP = pointtableP;
+        this.OriginalTable = originaltable;
+        return this;
+    }
+    public Graph setPointTableP(TableView<GraphPoint> originaltableP) {
+
+        //Hide
+
+        originaltableP.setOnMouseClicked(mouseEvent -> {
+            TablePosition<?, ?> pos = originaltableP.getFocusModel().getFocusedCell();
+            if (pos != null && pos.getColumn() == 0) {
+                GraphPoint point = originaltableP.getSelectionModel().getSelectedItem();
+                if (point != null) {
+                    originaltableP.refresh();  // Refresca después de cambiar la visibilidad
+                }
+            }
+        });
+
+
+        //Delete
+        originaltableP.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.BACK_SPACE){
+                TablePosition<?, ?> pos = originaltableP.getFocusModel().getFocusedCell();
+                if (pos != null && pos.getRow() >= 0) {
+                    GraphPoint point = originaltableP.getSelectionModel().getSelectedItem();
+                    if (point != null) {
+                        graphForm.removePoint(point);
+                        graphForm.updateLines();
+                        updateComponents();
+                    }
+                }
+            }
+        });
+
+        this.OriginalTableP = originaltableP;
         return this;
     }
 
@@ -549,7 +542,7 @@ public class Graph extends Pane {
     public Graph setConfigToolbar(ToolBar configToolbar){
         List<Node> itemList = configToolbar.getItems();
 
-        if (itemList.size() >= 2){
+        if (!itemList.isEmpty()){
             ((Button) (itemList.get(0))).setOnAction(event -> {
                 openConfigDialog();
             });
@@ -882,23 +875,34 @@ public class Graph extends Pane {
     }
 
     //***********************************
-    //FUNCIONES QUE USO PARA LA TRASLACION
     public Graph setLimpiar() {
         setGraphState(GRAPH_COMMANDS.SELECT);
         graphForm.clear();
-        updateComponents();
+
 
         return this;
     }
+    public void clearTables() {
+        // Limpia la tabla de puntos originales
+        if (OriginalTable != null) {
+            OriginalTable.setItems(FXCollections.observableArrayList()); // Establece una lista vacía
+        }
 
+        // Limpia la tabla de puntos trasladados
+        if (OriginalTableP != null) {
+            OriginalTableP.setItems(FXCollections.observableArrayList()); // Establece una lista vacía
+        }
+    }
+
+    //FUNCIONES QUE USO PARA LA TRASLACION
     public Graph setFiguraPersonalida(ApplicationControllerTraslacion apt) {
         GraphFigura.GRAPH_FIGURA template = GraphFigura.GRAPH_FIGURA.FIGURAORIGINAL;
 
         // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
         template.create(this, graphForm, apt);
 
-        // Actualiza componentes si es necesario
-        updateComponents();
+
+
 
         return this;
     }
@@ -908,9 +912,141 @@ public class Graph extends Pane {
         // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
         template.create(this, graphForm, apt);
 
-        // Actualiza componentes si es necesario
-        updateComponents();
+
+
 
         return this;
     }
+    public void updateoriginalPointTable(ApplicationControllerTraslacion apt) {
+        try {
+            if (OriginalTable == null) {
+                System.out.println("Error: pointTable no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFigura.getPointsOriginales(this, graphForm, apt));
+            OriginalTable.setItems(translatedPoints);
+            OriginalTable.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+    public void updateTranslatedPointTable(ApplicationControllerTraslacion apt) {
+        try {
+            if (OriginalTableP == null) {
+                System.out.println("Error: pointTableP no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFigura.getPointsTrasladados(this, graphForm, apt));
+            OriginalTableP.setItems(translatedPoints);
+            OriginalTableP.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+
+
+    //FUNCIONES QUE USO PARA LA ESCALACION
+    public Graph setFiguraPersonalidaS(ApplicationControllerEscalacion apt) {
+        GraphFiguraS.GRAPH_FIGURA template = GraphFiguraS.GRAPH_FIGURA.FIGURAORIGINAL;
+
+        // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
+        template.create(this, graphForm, apt);
+
+
+
+
+        return this;
+    }
+    public Graph setFiguraEscalada(ApplicationControllerEscalacion apt) {
+        GraphFiguraS.GRAPH_FIGURA template = GraphFiguraS.GRAPH_FIGURA.FIGURAESCALADA;
+
+        // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
+        template.create(this, graphForm, apt);
+
+
+
+        return this;
+    }
+    public void updateoriginalPointTableS(ApplicationControllerEscalacion apt) {
+        try {
+            if (OriginalTable == null) {
+                System.out.println("Error: pointTable no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFiguraS.getPointsOriginales(this, graphForm, apt));
+            OriginalTable.setItems(translatedPoints);
+            OriginalTable.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+    public void updateTranslatedPointTableS(ApplicationControllerEscalacion apt) {
+        try {
+            if (OriginalTableP == null) {
+                System.out.println("Error: pointTableP no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFiguraS.getPointsEscalados(this, graphForm, apt));
+            OriginalTableP.setItems(translatedPoints);
+            OriginalTableP.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+
+    //FUNCIONES QUE USO PARA LA ROTACION
+    public Graph setFiguraPersonalidaR(ApplicationControllerRotacion apt) {
+        GraphFiguraR.GRAPH_FIGURA template = GraphFiguraR.GRAPH_FIGURA.FIGURAORIGINAL;
+
+        // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
+        template.create(this, graphForm, apt);
+
+
+
+
+        return this;
+    }
+    public Graph setFiguraRotada(ApplicationControllerRotacion apt) {
+        GraphFiguraR.GRAPH_FIGURA template = GraphFiguraR.GRAPH_FIGURA.FIGURAROTADA;
+
+        // Ejecuta el método create para graficar con el template CARTESIANASABSOLUTAS
+        template.create(this, graphForm, apt);
+
+
+
+        return this;
+    }
+    public void updateoriginalPointTableR(ApplicationControllerRotacion apt) {
+        try {
+            if (OriginalTable == null) {
+                System.out.println("Error: pointTable no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFiguraR.getPointsOriginales(this, graphForm, apt));
+            OriginalTable.setItems(translatedPoints);
+            OriginalTable.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+    public void updateTranslatedPointTableR(ApplicationControllerRotacion apt) {
+        try {
+            if (OriginalTableP == null) {
+                System.out.println("Error: pointTableP no está inicializada.");
+                return; // Salir del método si es nulo
+            }
+
+            ObservableList<GraphPoint> translatedPoints = FXCollections.observableArrayList(GraphFiguraR.getPointsRotados(this, graphForm, apt));
+            OriginalTableP.setItems(translatedPoints);
+            OriginalTableP.refresh();
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprimir la excepción para depuración
+        }
+    }
+
 }

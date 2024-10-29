@@ -10,10 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
+
 import java.io.IOException;
 
-public class ApplicationControllerTraslacion {
+public class ApplicationControllerRotacion {
 
     @FXML
     private Pane mainPane;
@@ -25,10 +25,9 @@ public class ApplicationControllerTraslacion {
     @FXML
     Button btnRegresarMenu;
     @FXML
-    Button btnTrasladar;
+    Button btnRotar;
     @FXML
     ToolBar configToolbar;
-
     @FXML
     TableView<GraphPoint> pointTable;
 
@@ -52,14 +51,14 @@ public class ApplicationControllerTraslacion {
     TableColumn<GraphPoint, Double> yColumnP;
 
     @FXML
-    TextField trasX, trasY;
+    TextField RotA;
 
-    int tx , ty ;
+    double rA ;
 
 
     Graph graph;
 
-    public ApplicationControllerTraslacion() {
+    public ApplicationControllerRotacion() {
         graph = new Graph(32, 64, 768, 640);
     }
 
@@ -69,19 +68,15 @@ public class ApplicationControllerTraslacion {
         initializaPointTableP();
 
         graph.addToMainPane(mainPane);
-
         graph.setConfigToolbar (configToolbar);
-
         btnGraphFigura.setOnAction(event -> {
-            trasX.setText("15");
-            trasY.setText("15");
-            graph.updateoriginalPointTable(this);
-            graph.setFiguraPersonalida(this); // Configura la figura
+            RotA.setText("90");
+            graph.updateoriginalPointTableR(this);
+            graph.setFiguraPersonalidaR(this); // Configura la figura
         });
 
         btnLimpiar.setOnAction(event -> {
-            trasX.setText("");
-            trasY.setText("");
+            RotA.setText("");
             graph.setLimpiar();
             graph.clearTables();
         });
@@ -97,27 +92,23 @@ public class ApplicationControllerTraslacion {
 
         });
 
-        btnTrasladar.setOnAction(event -> {
+        btnRotar.setOnAction(event -> {
             try {
-                tx = Integer.parseInt(trasX.getText());
-                ty = Integer.parseInt(trasY.getText());
-                System.out.println("SIENTREEEE" + tx + "," + ty);
+                rA = Double.parseDouble(RotA.getText());
+
+                System.out.println("SIENTREEEE" + rA );
             } catch (NumberFormatException e) {
-                tx = 0;
-                ty = 0; // Valor predeterminado en caso de error
-                System.out.println("NOENTREEEEE" + tx + "," + ty);
+                rA = 0;
+
+                System.out.println("NOENTREEEEE" + rA );
             }
-            graph.setFiguraTrasladada(this);
-            graph.updateTranslatedPointTable(this);// Configura la figura trasladada
+            graph.setFiguraRotada(this);
+            graph.updateTranslatedPointTableR(this);// Configura la figura trasladada
         });
     }
 
-    public int getTx() {
-        return tx;
-    }
-
-    public int getTy() {
-        return ty;
+    public double getrA() {
+        return rA;
     }
 
     public void initializaPointTable(){

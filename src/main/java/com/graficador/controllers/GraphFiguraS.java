@@ -4,22 +4,17 @@ import com.graficador.graphic.Graph;
 import com.graficador.graphic.GraphForm;
 import com.graficador.graphic.GraphLine;
 import com.graficador.graphic.GraphPoint;
-import com.graficador.utils.DialogUtils;
-import com.graficador.utils.Utils;
-import javafx.util.Pair;
 
-import java.util.List;
-
-public class GraphFigura {
+public class GraphFiguraS {
 
     @FunctionalInterface
     public interface GraphTemplateAction {
-        void apply(Graph graph, GraphForm graphForm, ApplicationControllerTraslacion apt);
+        void apply(Graph graph, GraphForm graphForm, ApplicationControllerEscalacion apt);
     }
 
     public enum GRAPH_FIGURA {
-        FIGURAORIGINAL("Figura Original", GraphFigura::createFiguraOriginal),
-        FIGURATRASLADADA("Figura Trasladada", GraphFigura::createFiguraTrasladada);
+        FIGURAORIGINAL("Figura Original", GraphFiguraS::createFiguraOriginal),
+        FIGURAESCALADA("Figura ESCALADA", GraphFiguraS::createFiguraEscalada);
 
         String   name  ;
         GraphTemplateAction create;
@@ -41,7 +36,7 @@ public class GraphFigura {
             return name;
         }
 
-        public void create(Graph graph, GraphForm graphForm, ApplicationControllerTraslacion apt){
+        public void create(Graph graph, GraphForm graphForm, ApplicationControllerEscalacion apt){
             create.apply(graph,graphForm,apt);
         }
 
@@ -49,7 +44,7 @@ public class GraphFigura {
 
 
 
-    public static void createFiguraOriginal(Graph graph, GraphForm graphForm, ApplicationControllerTraslacion apt){
+    public static void createFiguraOriginal(Graph graph, GraphForm graphForm, ApplicationControllerEscalacion apt){
         GraphPoint[] points = new GraphPoint[8];
         points[0] = ((GraphPoint)new GraphPoint(0, 0).setMainGraph(graph)).setOrigin(graphForm.getOrigin()).setName("P1");
         points[1] = ((GraphPoint)new GraphPoint(0, 0).setMainGraph(graph)).setOrigin(graphForm.getOrigin()).setName("P2");
@@ -79,12 +74,12 @@ public class GraphFigura {
 
     }
 
-    public static void createFiguraTrasladada(Graph graph, GraphForm graphForm, ApplicationControllerTraslacion apt){
+    public static void createFiguraEscalada(Graph graph, GraphForm graphForm, ApplicationControllerEscalacion apt){
 
-        int tx = apt.getTx();
-        int ty = apt.getTy();
+        double Sx = apt.getSx();
+        double Sy = apt.getSy();
 
-        System.out.println("SIFUNCIONA " + tx + "," + ty);
+        System.out.println("SIFUNCIONA " + Sx + "," + Sy);
 
         GraphPoint[] pointsDos = new GraphPoint[8];
         pointsDos[0] = ((GraphPoint)new GraphPoint(0, 0).setMainGraph(graph)).setOrigin(graphForm.getOrigin()).setName("P'1");
@@ -98,14 +93,14 @@ public class GraphFigura {
 
 
 
-        pointsDos[0].setXY(10 + tx, 30 + ty);
-        pointsDos[1].setXY(20 + tx, 30 + ty);
-        pointsDos[2].setXY(20 + tx, 20 + ty);
-        pointsDos[3].setXY(30 + tx, 20 + ty);
-        pointsDos[4].setXY(30 + tx, 30 + ty);
-        pointsDos[5].setXY(40 + tx, 30 + ty);
-        pointsDos[6].setXY(40 + tx, 20 + ty);
-        pointsDos[7].setXY(50 + tx, 20 + ty);
+        pointsDos[0].setXY(10 * Sx, 30 * Sy);
+        pointsDos[1].setXY(20 * Sx, 30 * Sy);
+        pointsDos[2].setXY(20 * Sx, 20 * Sy);
+        pointsDos[3].setXY(30 * Sx, 20 * Sy);
+        pointsDos[4].setXY(30 * Sx, 30 * Sy);
+        pointsDos[5].setXY(40 * Sx, 30 * Sy);
+        pointsDos[6].setXY(40 * Sx, 20 * Sy);
+        pointsDos[7].setXY(50 * Sx, 20 * Sy);
 
         for (GraphPoint point : pointsDos) {
             graphForm.addPoint(point);
@@ -120,9 +115,9 @@ public class GraphFigura {
     }
 
     //*------------------------------------------------ metodos para leer
-    public static GraphPoint[] getPointsTrasladados(Graph graph, GraphForm graphForm, ApplicationControllerTraslacion apt) {
-        int tx = apt.getTx();
-        int ty = apt.getTy();
+    public static GraphPoint[] getPointsEscalados(Graph graph, GraphForm graphForm, ApplicationControllerEscalacion apt) {
+        double Sx = apt.getSx();
+        double Sy = apt.getSy();
 
         GraphPoint[] pointsDos = new GraphPoint[8];
         pointsDos[0] = ((GraphPoint)new GraphPoint(0, 0).setMainGraph(graph)).setOrigin(graphForm.getOrigin()).setName("P'1");
@@ -134,21 +129,20 @@ public class GraphFigura {
         pointsDos[6] = ((GraphPoint)new GraphPoint(0, 0).setMainGraph(graph)).setOrigin(graphForm.getOrigin()).setName("P'7");
         pointsDos[7] = ((GraphPoint)new GraphPoint(0, 0).setMainGraph(graph)).setOrigin(graphForm.getOrigin()).setName("P'8");
 
-        pointsDos[0].setXY(10 + tx, 30 + ty);
-        pointsDos[1].setXY(20 + tx, 30 + ty);
-        pointsDos[2].setXY(20 + tx, 20 + ty);
-        pointsDos[3].setXY(30 + tx, 20 + ty);
-        pointsDos[4].setXY(30 + tx, 30 + ty);
-        pointsDos[5].setXY(40 + tx, 30 + ty);
-        pointsDos[6].setXY(40 + tx, 20 + ty);
-        pointsDos[7].setXY(50 + tx, 20 + ty);
+        pointsDos[0].setXY(10 * Sx, 30 * Sy);
+        pointsDos[1].setXY(20 * Sx, 30 * Sy);
+        pointsDos[2].setXY(20 * Sx, 20 * Sy);
+        pointsDos[3].setXY(30 * Sx, 20 * Sy);
+        pointsDos[4].setXY(30 * Sx, 30 * Sy);
+        pointsDos[5].setXY(40 * Sx, 30 * Sy);
+        pointsDos[6].setXY(40 * Sx, 20 * Sy);
+        pointsDos[7].setXY(50 * Sx, 20 * Sy);
 
         return pointsDos; // Devolver el arreglo de puntos trasladados
     }
 
-    public static GraphPoint[] getPointsOriginales(Graph graph, GraphForm graphForm, ApplicationControllerTraslacion apt) {
-        int tx = apt.getTx();
-        int ty = apt.getTy();
+    public static GraphPoint[] getPointsOriginales(Graph graph, GraphForm graphForm, ApplicationControllerEscalacion apt) {
+
 
         GraphPoint[] points = new GraphPoint[8];
         points[0] = ((GraphPoint)new GraphPoint(0, 0).setMainGraph(graph)).setOrigin(graphForm.getOrigin()).setName("P1");

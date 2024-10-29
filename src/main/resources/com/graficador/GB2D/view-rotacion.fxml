@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane fx:id="mainPane" prefHeight="768.0" prefWidth="1316.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.controllers.ApplicationControllerTraslacion">
+<Pane fx:id="mainPane" prefHeight="768.0" prefWidth="1316.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graficador.controllers.ApplicationControllerRotacion">
    <children>
       <ToolBar fx:id="commandToolbar" prefHeight="35.0" prefWidth="340.0">
         <items>
@@ -24,7 +24,7 @@
       </ToolBar>
       <ToolBar fx:id="configToolbar" layoutX="891.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="394.0">
          <items>
-            <Button fx:id="btnConfig" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" text="Configuracion" />
+            <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" text="Configuracion" />
 
          </items>
       </ToolBar>
@@ -39,12 +39,11 @@
          </columnResizePolicy>
       </TableView>
 
-      <Pane layoutX="827.0" layoutY="48.0" prefHeight="94.0" prefWidth="216.0">
+      <Pane layoutX="827.0" layoutY="40.0" prefHeight="102.0" prefWidth="216.0">
          <children>
             <Pane layoutY="14.0" prefHeight="46.0" prefWidth="103.0">
                <children>
-                  <TextField fx:id="trasX" layoutX="39.0" layoutY="12.0" prefHeight="25.0" prefWidth="53.0" />
-                  <Label alignment="CENTER" layoutY="12.0" prefHeight="17.0" prefWidth="39.0" text="Tx">
+                  <Label alignment="CENTER" layoutX="52.0" layoutY="20.0" prefHeight="17.0" prefWidth="39.0" text="R(θ)">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -53,20 +52,20 @@
             </Pane>
             <Pane layoutX="103.0" layoutY="14.0" prefHeight="46.0" prefWidth="103.0">
                <children>
-                  <TextField fx:id="trasY" layoutX="39.0" layoutY="12.0" prefHeight="25.0" prefWidth="53.0" />
-                  <Label alignment="CENTER" layoutY="12.0" prefHeight="17.0" prefWidth="39.0" text="Ty">
+                  <TextField fx:id="RotA" layoutY="20.0" prefHeight="25.0" prefWidth="53.0" />
+                  <Label layoutX="62.0" layoutY="11.0" text="°">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="29.0" />
                      </font>
                   </Label>
                </children>
             </Pane>
-            <Label layoutX="31.0" layoutY="2.0" text="Vector de Traslacion">
+            <Label layoutX="31.0" layoutY="2.0" text="Vector de Rotacion">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Button fx:id="btnTrasladar" layoutX="61.0" layoutY="67.0" mnemonicParsing="false" text="TRASLADAR">
+            <Button fx:id="btnRotar" layoutX="66.0" layoutY="75.0" mnemonicParsing="false" text="ROTAR">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -76,7 +75,7 @@
       <ToolBar layoutX="301.0" prefHeight="35.0" prefWidth="143.0" />
       <ToolBar layoutX="410.0" prefHeight="35.0" prefWidth="388.0">
          <items>
-            <Label prefHeight="0.0" prefWidth="184.0" text="TRASLACION BASICA">
+            <Label prefHeight="0.0" prefWidth="184.0" text="ROTACION BASICA">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

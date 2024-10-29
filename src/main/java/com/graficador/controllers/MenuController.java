@@ -45,7 +45,7 @@ public class MenuController {
 
         btnEscalation.setOnAction(actionEvent -> {
             try {
-                openGraph();
+                openGraphS();
                 ((Stage)btnEscalation.getScene().getWindow()).close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -54,7 +54,7 @@ public class MenuController {
 
         btnRotation.setOnAction(actionEvent -> {
             try {
-                openGraph();
+                openGraphR();
                 ((Stage)btnRotation.getScene().getWindow()).close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -74,6 +74,24 @@ public class MenuController {
     public void openGraph() throws IOException {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("GB2D/view-traslacion.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1510, 768);
+        stage.setTitle("Graficador");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void openGraphS() throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("GB2D/view-escalacion.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1510, 768);
+        stage.setTitle("Graficador");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void openGraphR() throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("GB2D/view-rotacion.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1510, 768);
         stage.setTitle("Graficador");
         stage.setScene(scene);
